@@ -14,20 +14,19 @@ const bcrypt = require('bcryptjs');
 router.get('/:id', async (req, res) => {
 	try {
 		res.send({type: 'USER SHOW HIT POSTMAN'})
-
+		// find user by id and populate all the experiences
+		// that belong to that user
+		User.findById(req.params.id)
+			.populate('experiences')
+			.exec((err, foundUser) => {
+				res.json({
+					user: foundUser,
+					loggedIn: req.session
+				})
+			})
 	} catch(err) {
 		res.send(err)
 	}
-
-	// User.findById(req.params.id)
-	// 	.populate('experiences')
-	// 	.exec((err, foundUser) => {
-	// 		res.json({
-	// 			user: foundUser,
-	// 			loggedIn: req.session
-	// 		})
-
-	// 	})
 
 });
 
@@ -39,8 +38,9 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
 
 	try {
-		// const createdUser = await User.create(userDbEntry);
 		res.send({type: 'CREATE NEW USER HIT POSTMAN'})
+
+		const createdUser = await User.create(userDbEntry);
 	} catch(err) {
 		res.send(err)
 	}
@@ -73,11 +73,12 @@ router.post('/', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
 		try {
 			res.send({type: 'EDIT USER ACCOUNT HIT POSTMAN'})
-			// const foundUser = await User.findById(req.params.id);
-			// res.json({
-			// 	user: foundUser
-			// })
-			// console.log(foundUser);
+			
+			const foundUser = await User.findById(req.params.id);
+			res.json({
+				user: foundUser
+			})
+			console.log(foundUser);
 		} catch(err) {
 			res.send(err)
 		}

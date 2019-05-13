@@ -58,21 +58,18 @@ router.post('/', async (req, res, next) => {
 // router.get('/user/:id/edit)
 // Check to see if user session ID is true to allow access to this page
 // Find user in DB
-router.get('/:id/edit', async (req, res) => {
-	res.send({type: 'EDIT USER ACCOUNT HIT POSTMAN'})
-	if (req.session.usersDbId == req.params.id) {	
-		try {
-			const foundUser = await User.findById(req.params.id);
-			res.json({
-				status: 200,
-				user: foundUser
-			})
-			console.log(foundUser + '<--- Found User ');
-		} catch(err) {
-			res.send(err)
-		}
-	}
-});
+// router.get('/:id/edit', async (req, res, next) => {
+// 	try {
+// 		const foundUser = await User.findById(req.params.id);
+// 		res.json({
+// 			status: 200,
+// 			user: foundUser
+// 		})
+// 		console.log(foundUser + '<--- Found User ');
+// 	} catch(err) {
+// 		next(err)
+// 	}
+// });
 
 
 
@@ -82,18 +79,15 @@ router.get('/:id/edit', async (req, res) => {
 // body may include the following fields:
 // 	password:
 // 	email: 
-router.put('/:id', async (req, res) => {
-	res.send({type: 'UPDATE USER HIT POSTMAN'})
-	if (req.session.usersDbId == req.params.id) {
-		try {
-			const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true});
-			res.json({
-				status: 200,
-				data: updatedUser
-			})
-		} catch(err) {
-			res.send(err)
-		}
+router.put('/:id', async (req, res, next) => {
+	try {
+		const updatedUser = await User.findByIdAndUpdate(req.params.id);
+		res.json({
+			status: 200,
+			data: updatedUser
+		})
+	} catch(err) {
+		next(err)
 	}
 });
 
@@ -105,16 +99,15 @@ router.put('/:id', async (req, res) => {
 // Router.delete('/user/:id') 
 // Will query the database and remove the specified user when 
 // the 'DELETE' button is submitted on the account edit page
-router.delete('/:id', async (req, res) => {
-	res.send({type: 'DELETE USER HIT POSTMAN'})
+router.delete('/:id', async (req, res, next) => {
 	try {
-		const deletedMovie = await Movie.findByIdAndRemove(req.params.id);
+		const deletedUser = await User.findByIdAndRemove(req.params.id);
 		res.json({
 			status: 200,
-			data: deletedMovie
+			data: deletedUser
 	});
 		} catch(err){
-			res.send(err);
+			next(err);
 		}
 
 });

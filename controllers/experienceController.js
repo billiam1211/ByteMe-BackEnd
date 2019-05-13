@@ -14,6 +14,7 @@ const bcrypt = require('bcryptjs');
 router.post('/', async (req, res, next) => {
 	try {
 		const createdExperience = await Experience.create(req.body)
+		// also will need to find the restaurant ID and store it for this step
 		res.json({
 			status: 200,
 			data: createdExperience
@@ -31,10 +32,7 @@ router.post('/', async (req, res, next) => {
 // Locate the experience based on id and populate all the experiences tied to the user
 router.get('/:id', async (req, res, next) => {
 	try {
-		const foundExperience = await Experience.findOne({experiences: foundExperience})
-		console.log(`${foundUser._id} <-----Found User`);
-		console.log(`${typeof foundUser._id} <-----Found User`);
-		console.log(req.session);
+		const foundExperience = await Experience.findById(req.params.id)
 		res.json({
 			status: 200,
 			data: foundExperience

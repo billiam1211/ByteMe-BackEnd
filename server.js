@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(session({
 	secret: 'chuck norris',
 	resave: false,
-	saveUnitialized: false
+	saveUninitialized: false
 }))
 
 

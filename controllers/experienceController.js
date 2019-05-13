@@ -18,12 +18,13 @@ router.post('/', async (req, res, next) => {
 			status: 200,
 			data: createdExperience
 		})
-
 	} catch (err) {
-		console.log(err);
-		res.send(err)
+		next(err)
 	} 
 })
+
+
+
 
 // SHOW EXPERIENCE:
 // Router.get('/experiences/:id')
@@ -41,19 +42,28 @@ router.get('/:id', async (req, res, next) => {
 	} catch (err) {
 		next(err)
 	}
-
 })
 
-// EXPERIENCE UDPATE:
-// PUT /:id -- Will query the database for experiences that have the same user id as the user that is logged in and update the current experience so that the DB is updated with the new information
+
+
+
+// UDPATE EXPERIENCE: 
+// PUT /:id -- Will query the database for experiences that have the same user id as 
+// the user that is logged in and update the current experience so that the DB is 
+// updated with the new information
 router.put('/:id', async (req, res, next) => {
 	try {
 		const foundExperience = await Experience.findById(req.params.id);
-		const foundUser = await User.findOne({})
+		res.json({
+			status: 200,
+			data: foundExperience
+		})		
 	} catch (err) {
 		next(err)
 	}
 })
+
+
 
 
 // EXPERIENCE DELETE:
@@ -64,8 +74,10 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
 	try {
 		const foundExperience = await Experience.findById(req.params.id);
-		const foundUser = await User.findOne({experiences: foundExperience});
-
+		res.json({
+			status: 200,
+			data: foundExperience
+		})
 	} catch(err) {
 		next(err)
 	}

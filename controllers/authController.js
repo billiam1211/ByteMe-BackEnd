@@ -13,28 +13,15 @@ const bcrypt = require('bcryptjs');
 // that are restricted to only logged in users. 
 // This will be accessible in the header component of the application 
 // and will allow users to log in from any page.
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   console.log(req.body, '<=== this is session')
-
   try {
     const foundUser = await User.findOne({userName: req.body.userName});
-    // console.log(foundUser);
-    if(foundUser){
-      if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
-        req.session.message = '';
-        req.session.logged = true;
-        req.session.usersDbId = foundUser._id;
-        console.log(req.session.usersDbId + '<=== Session userDbId');
-        // console.log(req.session, ' successful in login')
-        res.redirect(`/users/${foundUser._id}`);
-      } else {
-        req.session.message = "Username or password is incorrect";
-        res.redirect('/');
-      }
-    } else {
-      req.session.message = 'Username or Password is incorrect';
-      res.redirect('/');
-    }
+      res.json({
+        status: 200,
+        data: foundUser
+      })
+    
   } catch(err){
     next(err);
   } 

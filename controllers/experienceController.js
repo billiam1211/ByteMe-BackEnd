@@ -69,15 +69,16 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
 	console.log('Delete experience route');
     try {
-        const foundExperience = await Experience.findById(req.params.id);
+        const deletedExperience = await Experience.findByIdAndRemove(req.params.id);
         res.json({
             status: 200,
-            data: foundExperience
+            data: deletedExperience
         })
     } catch (err) {
         next(err)
     }
 }) // END OF DELETE EXPERIENCE
+
 
 
 module.exports = router;

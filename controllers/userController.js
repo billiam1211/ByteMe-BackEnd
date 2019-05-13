@@ -54,26 +54,6 @@ router.post('/', async (req, res, next) => {
 
 
 
-// USER EDIT ACCOUNT:  // <--- Dont think I need this route...
-// router.get('/user/:id/edit)
-// Check to see if user session ID is true to allow access to this page
-// Find user in DB
-// router.get('/:id/edit', async (req, res, next) => {
-// 	try {
-// 		const foundUser = await User.findById(req.params.id);
-// 		res.json({
-// 			status: 200,
-// 			user: foundUser
-// 		})
-// 		console.log(foundUser + '<--- Found User ');
-// 	} catch(err) {
-// 		next(err)
-// 	}
-// });
-
-
-
-
 // USER UPDATE ACCOUNT:
 router.put('/:id', async (req, res, next) => {
 	console.log('Hit User update route');
@@ -114,6 +94,26 @@ router.delete('/:id', async (req, res, next) => {
         next(err);
     }
 }); // END OF DELETE USER 
+
+
+
+
+// USER EDIT ACCOUNT:  // <--- Dont think I need this route...
+// router.get('/user/:id/edit)
+// Check to see if user session ID is true to allow access to this page
+// Find user in DB
+// router.get('/:id/edit', async (req, res, next) => {
+// 	try {
+// 		const foundUser = await User.findById(req.params.id);
+// 		res.json({
+// 			status: 200,
+// 			user: foundUser
+// 		})
+// 		console.log(foundUser + '<--- Found User ');
+// 	} catch(err) {
+// 		next(err)
+// 	}
+// });
 
 
 

@@ -81,7 +81,12 @@ router.post('/', async (req, res, next) => {
 // 	email: 
 router.put('/:id', async (req, res, next) => {
 	try {
-		const updatedUser = await User.findByIdAndUpdate(req.params.id);
+		const foundUser = await User.findByIdAndUpdate(req.params.id);
+		const updatedUser = {
+			username: req.body.username,
+			password: req.body.password,
+			email: req.body.email
+		}
 		res.json({
 			status: 200,
 			data: updatedUser

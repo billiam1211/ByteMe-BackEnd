@@ -51,12 +51,18 @@ router.get('/:id', async (req, res, next) => {
 // updated with the new information
 router.put('/:id', async (req, res, next) => {
 	try {
-		const foundExperience = await Experience.findById(req.params.id);
+		const updatedExperience = {
+			title: req.body.title,
+			description: req.body.description,
+			restaurantId: req.body.restaurantId
+		}
+		const foundExperience = await Experience.findByIdAndUpdate(req.params.id, updatedExperience, {new: true});
+		await foundExperience.save();
 		res.json({
 			status: 200,
 			data: foundExperience
-		})		
-	} catch (err) {
+		})
+	} catch(err) {
 		next(err)
 	}
 })

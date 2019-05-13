@@ -34,6 +34,26 @@ router.post('/login', async (req, res, next) => {
 
 }); // END OF LOGIN
 
+
+
+// LOGOUT ROUGHT (/auth/logout)
+router.delete('/logout', async (req, res, next) => {
+  console.log('Logout route hit');
+  try{
+    const destroyedSession = await req.session.destroy();
+    res.status(200).json({
+      status: 200
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 400,
+      error: error
+    })
+  }
+}) // END OF LOGOUT ROUTE
+
+
+
 // app.post()
 // This route will be on an auth controller and will log 
 // that there is a new user and that sets the session username 

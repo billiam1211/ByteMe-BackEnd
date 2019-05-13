@@ -5,56 +5,56 @@ const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
 
 
-
-
 // USER SHOW:
 router.get('/:id', async (req, res, next) => {
-	try {
-		// find user by id and populate all the experiences
-		// that belong to that user
-		const foundUser = User.findById(req.params.id)
-			.populate('experiences')
-			.exec((err, foundUser) => {
-				res.json({
-					status: 200,
-					data: foundUser
-				})
-			})
-	} catch(err) {
-		next(err)
-	}
-});
+	console.log('Hit the user show route');
+    try {
+        // find user by id and populate all the experiences
+        // that belong to that user
+        const foundUser = User.findById(req.params.id)
+            .populate('experiences')
+            .exec((err, foundUser) => {
+                res.json({
+                    status: 200,
+                    data: foundUser
+                })
+            })
+    } catch (err) {
+        next(err)
+    }
+}); // END OF USER SHOW
 
 
 
 
 // CREATE NEW USER ACCOUNT:
 router.post('/', async (req, res, next) => {
-	const password = req.body.password
-	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-	const userDbEntry = {};
-	userDbEntry.username = req.body.username;
-	userDbEntry.password = passwordHash;
-	userDbEntry.email = req.body.email;
-	try {
-		const createdUser = await User.create(userDbEntry)
-		await createdUser.save()
-		req.session.logged = true;
-		req.session.usersDbId = createdUser._id;
-		console.log(createdUser);
-		res.json({
-			status: 200,
-			data: createdUser
-		})
-	} catch (err) {
-		next(err)
-	}
-});
+	console.log('Hit User Post route...');
+    const password = req.body.password
+    const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const userDbEntry = {};
+    userDbEntry.username = req.body.username;
+    userDbEntry.password = passwordHash;
+    userDbEntry.email = req.body.email;
+    try {
+        const createdUser = await User.create(userDbEntry)
+        await createdUser.save()
+        req.session.logged = true;
+        req.session.usersDbId = createdUser._id;
+        console.log(createdUser);
+        res.json({
+            status: 200,
+            data: createdUser
+        })
+    } catch (err) {
+        next(err)
+    }
+}); // END OF CREATE USER
 
 
 
 
-// USER EDIT ACCOUNT:
+// USER EDIT ACCOUNT:  // <--- Dont think I need this route...
 // router.get('/user/:id/edit)
 // Check to see if user session ID is true to allow access to this page
 // Find user in DB
@@ -75,57 +75,47 @@ router.post('/', async (req, res, next) => {
 
 
 // USER UPDATE ACCOUNT:
-// PUT /user:id this route will update the user in the database based on ID
-// body may include the following fields:
-// 	password:
-// 	email: 
 router.put('/:id', async (req, res, next) => {
-	try {
-		const foundUser = await User.findByIdAndUpdate(req.params.id);
-		const updatedUser = {
-			username: req.body.username,
-			password: req.body.password,
-			email: req.body.email
-		}
-		res.json({
-			status: 200,
-			data: updatedUser
-		})
-	} catch(err) {
-		next(err)
-	}
-});
+	console.log('Hit User update route');
+    try {
+    	console.log('');
+        const updatedUser = {
+        	username: req.body.username,
+        	description: req.body.description,
+        	email: req.body.email
+        }
+        const foundUser = await User.findByIdAndUpdate(req.params.id, updatedUser, {new: true})
+        await foundUser.save();
+        res.json({
+            status: 200,
+            data: foundUser
+        })
+    } catch (err) {
+        next(err)
+    }
+}); // END OF USER UPDATE
+
+
 
 
 
 
 // DESTROY USER:
-
-// Router.delete('/user/:id') 
-// Will query the database and remove the specified user when 
-// the 'DELETE' button is submitted on the account edit page
 router.delete('/:id', async (req, res, next) => {
-	try {
-		const deletedUser = await User.findByIdAndRemove(req.params.id);
-		res.json({
-			status: 200,
-			data: deletedUser
-	});
-		} catch(err){
-			next(err);
-		}
+	console.log('hit user delete route');
+    try {
+    	console.log('Hit Delete Route');
+        const deletedUser = await User.findByIdAndRemove(req.params.id);
+        res.json({
+            status: 200,
+            data: deletedUser
+        });
+    } catch (err) {
+        next(err);
+    }
+}); // END OF DELETE USER 
 
-});
+
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-

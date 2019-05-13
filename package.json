@@ -1,0 +1,30 @@
+{
+  "name": "backend-byteme",
+  "version": "1.0.0",
+  "description": "This is the back end express server Project III - Food Finder Application",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-session": "^1.16.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.5.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billiam1211/ByteMe-BackEnd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/billiam1211/ByteMe-BackEnd/issues"
+  },
+  "homepage": "https://github.com/billiam1211/ByteMe-BackEnd#readme"
+}

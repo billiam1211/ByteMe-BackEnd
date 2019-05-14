@@ -8,13 +8,12 @@ const User 			= require('../models/user.js');
 const Restaurant 	= require('../models/restaurant.js')
 
 
-
+// GET Request for 
 router.get('/', (req, res, next) => {
-
 		console.log(process.env.apiKey);
 		const apiKey = process.env.apiKey
 		superagent
-			.get(`https://developers.zomato.com/api/v2.1/search?q=${req.query.searchTerm}`)
+			.get(`https://developers.zomato.com/api/v2.1/search?q=${req.query.searchTerm1}`)
 			.set('user-key', apiKey)
 			.then((data) => {
 				const actualData = JSON.parse(data.text)
@@ -26,14 +25,14 @@ router.get('/', (req, res, next) => {
 					data: actualData.restaurants
 				})
 			})
-
 }) 
 
 
 
 
-
-
+// https://developers.zomato.com/api/v2.1/search?entity_type=city&q=greek&sort=real_distance&order=asc
+// https://developers.zomato.com/api/v2.1/search?entity_id=Chicago
+// &q=${req.query.searchTerm}&sort=rating&order=asc
 
 
 

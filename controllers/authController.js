@@ -8,11 +8,11 @@ const bcrypt = require('bcryptjs');
 // LOGIN ROUTE (auth/login)
 router.post('/login', async (req, res, next) => {
     try {
-        console.log('route is being hit');
+        console.log('auth route is being hit');
         const foundUser = await User.findOne({
             username: req.body.username
         });
-        console.log(foundUser);
+        console.log("found user: ", foundUser);
         if (foundUser) {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.username = req.body.username;

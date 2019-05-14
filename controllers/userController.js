@@ -30,7 +30,7 @@ router.get('/:id', async (req, res, next) => {
 
 // CREATE NEW USER ACCOUNT:
 router.post('/', async (req, res, next) => {
-	console.log('Hit User Post route...');
+	console.log('Hit User Create route...');
     const password = req.body.password
     const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const userDbEntry = {};

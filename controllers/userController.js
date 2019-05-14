@@ -3,10 +3,11 @@ const router = express.Router();
 const Experience = require('../models/experience.js');
 const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
-
+const Restaurant 	= require('../models/restaurant.js')
 
 // USER SHOW:
 router.get('/:id', async (req, res, next) => {
+    console.log(process.env.apiKey)
 	console.log('Hit the user show route');
     try {
         // find user by id and populate all the experiences

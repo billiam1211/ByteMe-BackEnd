@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const Experience = require('../models/experience.js');
-const User = require('../models/user.js');
-const bcrypt = require('bcryptjs');
+const express 		= require('express');
+const router 		= express.Router();
+const Experience 	= require('../models/experience.js');
+const User 			= require('../models/user.js');
+const bcrypt 		= require('bcryptjs');
+const Restaurant 	= require('../models/restaurant.js')
+const dotenv 		= require('dotenv').config()
 
 
 // CREATE Experience:

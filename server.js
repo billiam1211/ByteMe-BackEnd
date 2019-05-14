@@ -1,10 +1,11 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override')
-const cors = require('cors');
-const session = require('express-session');
-const bcrypt = require('bcryptjs');
+const express 			= require('express');
+const app 				= express();
+const bodyParser 		= require('body-parser');
+const methodOverride 	= require('method-override')
+const cors 				= require('cors');
+const session 			= require('express-session');
+const bcrypt 			= require('bcryptjs');
+const dotenv 			= require('dotenv').config()
 
 
 
@@ -17,6 +18,7 @@ require('./db/db');
 const experienceController 	= require('./controllers/experienceController');
 const userController 		= require('./controllers/userController');
 const authController 		= require('./controllers/authController');
+const restaurantController 	= require('./controllers/restaurantController');
 
 
 
@@ -46,6 +48,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/api/v1/users', userController);
 app.use('/api/v1/experiences', experienceController)
+app.use('/api/v1/restaurants', restaurantController)
 app.use('/auth', authController);
 
 

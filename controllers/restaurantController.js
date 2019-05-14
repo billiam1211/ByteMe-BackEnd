@@ -8,34 +8,63 @@ const User 			= require('../models/user.js');
 const Restaurant 	= require('../models/restaurant.js')
 
 
-// GET Request for 
+// GET Request for restaurants based on searchTerm keyword
 router.get('/', (req, res, next) => {
 		console.log(process.env.apiKey);
 		const apiKey = process.env.apiKey
 		superagent
-			.get(`https://developers.zomato.com/api/v2.1/search?q=${req.query.searchTerm1}`)
+			//get request which has the user's searchTerm concatenated into the string 
+			.get(`https://developers.zomato.com/api/v2.1/search?q=${req.query.searchTerm}`)
 			.set('user-key', apiKey)
 			.then((data) => {
-				const actualData = JSON.parse(data.text)
-				console.log(actualData.restaurants[0].restaurant.name);
-				// Should I map the actual data to a smaller object? If so, how? 
-				// All attempts to use .map() have not worked properly
+				let actualData = JSON.parse(data.text)
+				// console.log('<---Restaurant--->');
+				// console.log(actualData.restaurants[0].restaurant.name); // this prints the name of 1 restaurant..
+				const parsedData = actualData.restaurants.map( (element, i) => {
+					return {
+						name: element.restaurant.name,
+						cuisine: element.restaurant.cuisines,
+						url: element.restaurant.url,
+						address: element.restaurant.location.address,
+						zipCode: element.restaurant.location.zipcode,
+						cityId: element.restaurant.location.city_id
+					}
+				})
 				res.json({
 					status: 200,
-					data: actualData.restaurants
+					data: parsedData
 				})
 			})
 }) 
 
 
-
-
-// https://developers.zomato.com/api/v2.1/search?entity_type=city&q=greek&sort=real_distance&order=asc
-// https://developers.zomato.com/api/v2.1/search?entity_id=Chicago
-// &q=${req.query.searchTerm}&sort=rating&order=asc
-
-
-
+// API CALL TO GET USER LOCATION BY CITY ID
+router.get('/city', (req, res, next) => {
+		console.log(process.env.apiKey);
+		const apiKey = process.env.apiKey
+		superagent
+			//get request which has the user's searchTerm concatenated into the string 
+			.get(`https://developers.zomato.com/api/v2.1/locations?query=${req.query.searchTerm}&count=100`)
+			.set('user-key', apiKey)
+			.then((data) => {
+				let actualData = JSON.parse(data.text)
+				// console.log('<---Restaurant--->');
+				console.log(actualData); // this prints the name of city information..
+				const parsedData = actualData.location_suggestions.map((city, i) => {
+					return {
+						city: city.title,
+						city_id: city.city_id,
+						cityEntityId: city.entity_id,
+						lat: city.latitude,
+						lon: city.longitude,
+					}
+				})
+				res.json({
+					status: 200,
+					data: parsedData
+				})
+			})
+}) 
 
 
 module.exports = router;

@@ -7,7 +7,7 @@ const Restaurant 	= require('../models/restaurant.js')
 
 // USER SHOW:
 router.get('/:id', async (req, res, next) => {
-    console.log(process.env.apiKey)
+    // console.log(process.env.apiKey)
 	console.log('Hit the user show route');
     try {
         // find user by id and populate all the experiences
@@ -15,6 +15,7 @@ router.get('/:id', async (req, res, next) => {
         const foundUser = User.findById(req.params.id)
             .populate('experiences')
             .exec((err, foundUser) => {
+                console.log(foundUser, "<---Found user in show");
                 res.json({
                     status: 200,
                     data: foundUser
@@ -39,9 +40,9 @@ router.post('/', async (req, res, next) => {
     userDbEntry.email = req.body.email;
     try {
         const createdUser = await User.create(userDbEntry)
-        await createdUser.save()
         req.session.logged = true;
         req.session.usersDbId = createdUser._id;
+        await createdUser.save()
         console.log(createdUser);
         res.json({
             status: 200,

@@ -9,14 +9,29 @@ const dotenv 		= require('dotenv').config()
 
 // CREATE Experience:
 router.post('/', async (req, res, next) => {
+    const foundUser = User.findById(req.session.user._id)
+    console.log(foundUser, '<-- Found user');
+    // find user by id to get username
 	console.log('Hit experience create route');
+        const experience = {
+            restaurantId: req.body.restaurantId,
+            userId: req.session.user._id,
+            review: req.body.review,
+            username: req.session.username
+            // add username from query above ^^^
+        }
+    
     try {
-        const createdExperience = await Experience.create(req.body)
+        console.log('Experience ==>',experience);
+        const createdExperience = await Experience.create(experience)
         // also will need to find the restaurant ID and store it for this step
+        await createdExperience.save()
+        console.log('Created experience ==>',createdExperience);
         res.json({
             status: 200,
             data: createdExperience
         })
+
     } catch (err) {
         next(err)
     }

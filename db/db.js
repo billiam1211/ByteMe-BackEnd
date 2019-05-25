@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // food is the name of our database
 // that is automatically created
-mongoose.connect('mongodb://localhost/byteme', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false

@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 // LOGIN ROUTE (auth/login)
 router.post('/login', async (req, res, next) => {
     try {
-        console.log('auth route is being hit');
+        console.log('login route is being hit');
         const foundUser = await User.findOne({
             username: req.body.username
         });
@@ -16,11 +16,14 @@ router.post('/login', async (req, res, next) => {
         if (foundUser) {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.username = req.body.username;
+                req.session.user = foundUser
                 req.session.message = '';
                 req.session.logged = true;
+                req.session.message = 'Login Succesful';
                 res.json({
                     status: 200,
-                    data: foundUser
+                    data: foundUser,
+                    msg: req.session.message
                 })
             } else {
                 req.session.message = "Username or password is incorrect";
@@ -44,14 +47,18 @@ router.post('/login', async (req, res, next) => {
 
 
 
-// LOGOUT ROUGHT (/auth/logout)
-router.delete('/logout', async (req, res, next) => {
+// LOGOUT route (/auth/logout)
+router.get('/logout', async (req, res, next) => {
   console.log('Logout route hit');
   try{
-    const destroyedSession = await req.session.destroy();
-    res.status(200).json({
-      status: 200
-    })
+    if(req.session){
+
+        const destroyedSession = await req.session.destroy()
+        res.status(200).json({
+          status: 200
+        })
+        
+    }
   } catch(err) {
     res.status(400).json({
       status: 400,

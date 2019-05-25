@@ -8,18 +8,21 @@ const User 			= require('../models/user.js');
 const Restaurant 	= require('../models/restaurant.js')
 
 
-// GET Request for restaurants based on searchTerm keyword
-router.get('/', (req, res, next) => {
+// Post Request for restaurants based on searchTerm keyword
+router.post('/search', (req, res, next) => {
+	console.log('Hit Restaurant Get Route');
 	console.log(process.env.apiKey);
 	const apiKey = process.env.apiKey
 	superagent
 		//get request which has the user's searchTerm concatenated into the string 
-		.get(`https://developers.zomato.com/api/v2.1/search?entity_id=292&entity_type=city&q=${req.query.searchTerm}`)
+		.get(`https://developers.zomato.com/api/v2.1/search?entity_id=292&entity_type=city&q=${req.body.query}`)
 		.set('user-key', apiKey)
 		.then((data) => {
+
 			let actualData = JSON.parse(data.text)
 			// console.log('<---Restaurant--->');
 			console.log(actualData.restaurants); // this prints the name of 1 restaurant..
+			
 			const parsedData = actualData.restaurants.map( (element, i) => {
 				return {
 					restaurantId: element.restaurant.id,
@@ -31,6 +34,9 @@ router.get('/', (req, res, next) => {
 					cityId: element.restaurant.location.city_id
 				}
 			})
+
+			console.log("data to send: ", parsedData)
+
 			res.json({
 				status: 200,
 				data: parsedData
@@ -40,33 +46,46 @@ router.get('/', (req, res, next) => {
 
 
 
-// API CALL TO GET USER LOCATION BY CITY ID
-router.get('/city', (req, res, next) => {
+// Post Request for restaurants based on searchTerm keyword
+router.post('/find', (req, res, next) => {
+	console.log('Hit Single Restaurant Find Get Route');
 	console.log(process.env.apiKey);
 	const apiKey = process.env.apiKey
 	superagent
 		//get request which has the user's searchTerm concatenated into the string 
-		.get(`https://developers.zomato.com/api/v2.1/locations?query=${req.query.searchTerm}&count=100`)
+		.get(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${req.body.query}`)
 		.set('user-key', apiKey)
 		.then((data) => {
+
 			let actualData = JSON.parse(data.text)
 			// console.log('<---Restaurant--->');
-			console.log(actualData); // this prints the name of city information..
-			const parsedData = actualData.location_suggestions.map((city, i) => {
+			console.log(actualData.restaurants); // this prints the name of 1 restaurant..
+			
+			const parsedData = actualData.restaurants.map( (element, i) => {
 				return {
-					city: city.title,
-					city_id: city.city_id,
-					cityEntityId: city.entity_id,
-					lat: city.latitude,
-					lon: city.longitude,
+					restaurantId: element.restaurant.id,
+					name: element.restaurant.name,
+					cuisine: element.restaurant.cuisines,
+					url: element.restaurant.url,
+					address: element.restaurant.location.address,
+					zipCode: element.restaurant.location.zipcode,
+					cityId: element.restaurant.location.city_id
 				}
 			})
+
+			console.log("data to send: ", parsedData)
+
 			res.json({
 				status: 200,
 				data: parsedData
 			})
 		})
-}) 
+})
 
+
+// get route that takes parameter with RESTAURANT ID and queries database (use .populate chained to the Query 
+// to get all reviews) and if such a restaurant is in YOUR database, send back the found restaurant
+
+// router.get('/:id')
 
 module.exports = router;

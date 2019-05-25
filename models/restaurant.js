@@ -10,10 +10,11 @@ const restaurantSchema = new mongoose.Schema({
   delivery: 	{type: Boolean},
   cuisine: 		{type: String},
   zipcode: 		{type: String},
-  rating: 		{type: String} 
-
-
-
+  rating: 		{type: String},  
+  experiences: 	[{
+  	type: mongoose.Schema.Types.ObjectId,
+  	ref: 'Experience'
+  }]
 });
 
 

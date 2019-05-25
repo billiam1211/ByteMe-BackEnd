@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 
 
 const experienceSchema = new mongoose.Schema({
-  title: 		{type: String},
-  description: 	{type: String},
-  restaurantId: {type: String},
-  restaurantName: {type: String},
-  url: {type: String}
+	  review: {type: String},
+	  restaurantId: {type: String},
+	  userId: {type: String},
+	  username: {type: String}
 });
 
 

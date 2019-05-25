@@ -38,7 +38,7 @@ app.use(session({
 
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     optionsSuccessStatus: 200
 }
@@ -46,6 +46,7 @@ const corsOptions = {
 
 
 app.use(cors(corsOptions));
+
 app.use('/api/v1/users', userController);
 app.use('/api/v1/experiences', experienceController)
 app.use('/api/v1/restaurants', restaurantController)
@@ -54,6 +55,6 @@ app.use('/auth', authController);
 
 
 // SERVER LISTENING
-app.listen(process.env.PORT || 9000, () => {
-    console.log('listening on port 9000');
+app.listen(process.env.PORT, () => {
+    console.log('listening on port ', process.env.PORT);
 });

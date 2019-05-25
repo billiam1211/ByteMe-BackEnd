@@ -6,7 +6,7 @@ const superagent 	= require('superagent')
 const Experience 	= require('../models/experience.js');
 const User 			= require('../models/user.js');
 const Restaurant 	= require('../models/restaurant.js')
-const apiKey = process.env.API_KEY
+const apiKey 		= process.env.API_KEY
 
 // Post Request for restaurants based on searchTerm keyword
 router.post('/search', (req, res, next) => {

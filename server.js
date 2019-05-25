@@ -35,8 +35,6 @@ app.use(session({
     saveUninitialized: false
 }))
 
-
-
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
     credentials: true,

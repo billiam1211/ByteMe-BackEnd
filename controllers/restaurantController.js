@@ -6,13 +6,12 @@ const superagent 	= require('superagent')
 const Experience 	= require('../models/experience.js');
 const User 			= require('../models/user.js');
 const Restaurant 	= require('../models/restaurant.js')
-
+const apiKey = process.env.API_KEY
 
 // Post Request for restaurants based on searchTerm keyword
 router.post('/search', (req, res, next) => {
 	console.log('Hit Restaurant Get Route');
-	console.log(process.env.apiKey);
-	const apiKey = process.env.apiKey
+
 	superagent
 		//get request which has the user's searchTerm concatenated into the string 
 		.get(`https://developers.zomato.com/api/v2.1/search?entity_id=292&entity_type=city&q=${req.body.query}`)
@@ -49,8 +48,7 @@ router.post('/search', (req, res, next) => {
 // Post Request for restaurants based on searchTerm keyword
 router.post('/find', (req, res, next) => {
 	console.log('Hit Single Restaurant Find Get Route');
-	console.log(process.env.apiKey);
-	const apiKey = process.env.apiKey
+
 	superagent
 		//get request which has the user's searchTerm concatenated into the string 
 		.get(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${req.body.query}`)

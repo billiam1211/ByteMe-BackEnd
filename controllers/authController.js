@@ -7,12 +7,14 @@ const bcrypt = require('bcryptjs');
 
 // LOGIN ROUTE (auth/login)
 router.post('/login', async (req, res, next) => {
+
     try {
         console.log('login route is being hit');
         const foundUser = await User.findOne({
             username: req.body.username
         });
         console.log("found user: ", foundUser);
+
         if (foundUser) {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.username = req.body.username;
@@ -28,15 +30,15 @@ router.post('/login', async (req, res, next) => {
             } else {
                 req.session.message = "Username or password is incorrect";
                 res.json({
-                    status: 200,
-                    data: req.session.message
+                    status: 401,
+                    msg: req.session.message
                 })
             }
         } else {
-            req.session.message = 'Username or Password is incorrect';
+            req.session.message = 'User not found, check username or password';
             res.json({
-                status: 200,
-                data: req.session.message
+                status: 401,
+                msg: req.session.message
             })
         }
     } catch (err) {

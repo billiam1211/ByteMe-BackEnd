@@ -5,6 +5,8 @@ const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
 const Restaurant 	= require('../models/restaurant.js')
 
+
+
 // USER SHOW:
 router.get('/:id', async (req, res, next) => {
     // console.log(process.env.apiKey)
@@ -32,24 +34,51 @@ router.get('/:id', async (req, res, next) => {
 // CREATE NEW USER ACCOUNT:
 router.post('/', async (req, res, next) => {
 	console.log('Hit User Create route...');
-    const password = req.body.password
-    const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const userDbEntry = {};
-    userDbEntry.username = req.body.username;
-    userDbEntry.password = passwordHash;
-    userDbEntry.email = req.body.email;
-    try {
-        const createdUser = await User.create(userDbEntry)
-        req.session.logged = true;
-        req.session.usersDbId = createdUser._id;
-        await createdUser.save()
-        console.log(createdUser);
+
+    if(req.body.password != req.body.confirmPassword){
         res.json({
             status: 200,
-            data: createdUser
+            msg: 'Incorrect password'
         })
-    } catch (err) {
-        next(err)
+    } else {
+
+        const password = req.body.password
+        const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+        const userDbEntry = {};
+        userDbEntry.username = req.body.username;
+        userDbEntry.password = passwordHash;
+        userDbEntry.email = req.body.email;
+
+        try {
+
+            const checkDb = await User.find({email: req.body.email})
+            if(checkDb.length == 0){
+                console.log('make a user');
+                const createdUser = await User.create(userDbEntry)
+
+                if(createdUser){
+                    req.session.logged = true;
+                    req.session.usersDbId = createdUser._id;
+                    req.session.email = req.body.email;
+                    await createdUser.save();
+                    res.json({
+                        status: 200,
+                        data: createdUser,
+                        msg: 'Account created'
+                    })
+                    console.log(createdUser);
+                }
+            } else {
+                console.log('user exists');
+                res.json({
+                    status: 409,
+                    msg: 'Email is registered to another account'
+                })
+            }
+
+        } catch (err) {
+            next(err)
+        }
     }
 }); // END OF CREATE USER
 

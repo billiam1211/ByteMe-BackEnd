@@ -37,7 +37,7 @@ router.post('/', async (req, res, next) => {
 
     if(req.body.password != req.body.confirmPassword){
         res.json({
-            status: 200,
+            status: 401,
             msg: 'Incorrect password'
         })
     } else {

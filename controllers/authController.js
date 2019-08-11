@@ -14,7 +14,6 @@ router.post('/login', async (req, res, next) => {
             username: req.body.username
         });
         console.log("found user: ", foundUser);
-
         if (foundUser) {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.username = req.body.username;
@@ -44,8 +43,8 @@ router.post('/login', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-
 }); // END OF LOGIN
+
 
 
 

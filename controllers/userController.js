@@ -87,21 +87,32 @@ router.post('/', async (req, res, next) => {
 
 // USER UPDATE ACCOUNT:
 router.put('/:id', async (req, res, next) => {
-	console.log('Hit User update route');
+    console.log('Hit the user update route');
+    // add logic to check whether the user is logged in and to
+    // make sure that the logged in user matches the id other the 
+    // user that needs to be updated
     try {
-    	console.log('');
+
+        const password = req.body.password
+        const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
         const updatedUser = {
-        	username: req.body.username,
-        	description: req.body.description,
-        	email: req.body.email
+            email: req.body.email,
+            password: passwordHash
         }
-        const foundUser = await User.findByIdAndUpdate(req.params.id, updatedUser, {new: true})
-        await foundUser.save();
+
+        console.log(updatedUser);
+
+        const userToBeUpdated = await User.findByIdAndUpdate(req.params.id, updatedUser, {new: true})
+        await userToBeUpdated.save();
         res.json({
-            status: 200,
-            data: foundUser
+            status: 200, 
+            data: userToBeUpdated
         })
-    } catch (err) {
+
+        console.log(userToBeUpdated);
+
+    } catch(err) {
         next(err)
     }
 }); // END OF USER UPDATE

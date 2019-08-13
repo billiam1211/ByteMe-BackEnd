@@ -1,36 +1,47 @@
 const express 		= require('express');
 const router 		= express.Router();
 const Experience 	= require('../models/experience.js');
-const User 			= require('../models/user.js');
+const User          = require('../models/user.js');
 const bcrypt 		= require('bcryptjs');
 const Restaurant 	= require('../models/restaurant.js')
 const dotenv 		= require('dotenv').config()
 
-
-// CREATE Experience:
+///////////////////////
+// CREATE Experience //
+///////////////////////
 router.post('/', async (req, res, next) => {
-    const foundUser = User.findById(req.session.user._id)
-    console.log(foundUser, '<-- Found user');
-    // find user by id to get username
 	console.log('Hit experience create route');
+
+    // find the id of the logged in user
+    console.log(req.session.user._id);
+    
+    try {
+        const foundUser = await User.findById(req.session.user._id)
+        console.log(foundUser);
+
+        // create an experience object. Rating, review, and restaurantId will come from the front end
+        // logged in user data will be pulled from the session
         const experience = {
             restaurantId: req.body.restaurantId,
             userId: req.session.user._id,
+            username: req.session.user.username,
             review: req.body.review,
-            username: req.session.username
-            // add username from query above ^^^
+            rating: req.body.rating
         }
-    
-    try {
-        console.log('Experience ==>',experience);
+
+
+        // Push the listing we just created into the listings array of the foundUser
         const createdExperience = await Experience.create(experience)
-        // also will need to find the restaurant ID and store it for this step
-        await createdExperience.save()
-        console.log('Created experience ==>',createdExperience);
+        await foundUser.experiences.push(createdExperience);
+        await foundUser.save()
+        console.log('======================');
+        console.log("foundUser: ", foundUser);
+        console.log('======================');
+
         res.json({
             status: 200,
-            data: createdExperience
-        })
+            data: "Experience created"
+        }) 
 
     } catch (err) {
         next(err)
@@ -39,8 +50,9 @@ router.post('/', async (req, res, next) => {
 
 
 
-
-// SHOW EXPERIENCE:
+/////////////////////
+// SHOW EXPERIENCE //
+/////////////////////
 router.get('/:id', async (req, res, next) => {
 	console.log('Hit experience show route');
     try {
@@ -57,44 +69,10 @@ router.get('/:id', async (req, res, next) => {
 
 
 
-// UDPATE EXPERIENCE: 
-router.put('/:id', async (req, res, next) => {
-	console.log('Hit update experience route');
-    try {
-        const updatedExperience = {
-            title: req.body.title,
-            description: req.body.description,
-            restaurantId: req.body.restaurantId
-        }
-        const foundExperience = await Experience.findByIdAndUpdate(req.params.id, updatedExperience, {
-            new: true
-        });
-        await foundExperience.save();
-        res.json({
-            status: 200,
-            data: foundExperience
-        })
-    } catch (err) {
-        next(err)
-    }
-}) // END OF UPDATE EXPERIENCE 
 
 
 
 
-// EXPERIENCE DELETE:
-router.delete('/:id', async (req, res, next) => {
-	console.log('Delete experience route');
-    try {
-        const deletedExperience = await Experience.findByIdAndRemove(req.params.id);
-        res.json({
-            status: 200,
-            data: deletedExperience
-        })
-    } catch (err) {
-        next(err)
-    }
-}) // END OF DELETE EXPERIENCE
 
 
 

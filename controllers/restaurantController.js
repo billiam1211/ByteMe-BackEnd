@@ -11,7 +11,6 @@ const apiKey 		= process.env.API_KEY
 // Post Request for restaurants based on searchTerm keyword
 router.post('/search', (req, res, next) => {
 	console.log('Hit Restaurant Get Route');
-
 	superagent
 		//get request which has the user's searchTerm concatenated into the string 
 		.get(`https://developers.zomato.com/api/v2.1/search?entity_id=292&entity_type=city&q=${req.body.query}`)

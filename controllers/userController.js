@@ -7,6 +7,7 @@ const Restaurant 	= require('../models/restaurant.js')
 
 
 
+
 // USER SHOW:
 router.get('/:id', async (req, res, next) => {
     // console.log(process.env.apiKey)

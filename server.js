@@ -35,14 +35,13 @@ app.use(session({
     saveUninitialized: false
 }))
 
+// configure the CORS options...
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
     credentials: true,
     optionsSuccessStatus: 200
 }
-
-
-
+// use the configured CORS options
 app.use(cors(corsOptions));
 
 app.use('/api/v1/users', userController);

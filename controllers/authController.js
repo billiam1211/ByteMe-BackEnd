@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const experience = require('../models/experience.js');
-const User = require('../models/user.js');
-const bcrypt = require('bcryptjs');
+const User          = require('../models/user.js');
+const Experience    = require('../models/experience.js');
+const express       = require('express');
+const router        = express.Router();
+const dotenv        = require('dotenv').config()
+const bcrypt        = require('bcryptjs');
 
 
 // LOGIN ROUTE (auth/login)

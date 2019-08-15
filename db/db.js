@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -7,13 +8,13 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 mongoose.connection.on('connected', () => {
-  console.log('Mongoose is connected')
+  console.log('mongoose connected');
 });
 
-mongoose.connection.on('error', (err) => {
-  console.log(err, ' mongoose failed to connect')
+mongoose.connection.on('disconnected', () => {
+  console.log('mongoose disconnected to ');
 });
 
-mongoose.connection.on('disconncted', () => {
-  console.log('Mongoose is disconnected')
+mongoose.connection.on('error', (error) => {
+  console.log('mongoose error ', error);
 });

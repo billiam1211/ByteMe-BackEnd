@@ -2,8 +2,8 @@ const User          = require('../models/user.js');
 const Experience    = require('../models/experience.js');
 const express       = require('express');
 const router        = express.Router();
-const dotenv        = require('dotenv').config()
 const bcrypt        = require('bcryptjs');
+const dotenv        = require('dotenv').config()
 
 
 // LOGIN ROUTE (auth/login)
@@ -48,26 +48,23 @@ router.post('/login', async (req, res, next) => {
 
 
 
-
-// LOGOUT route (/auth/logout)
-router.get('/logout', async (req, res, next) => {
-  console.log('Logout route hit');
-  try{
+// User Logout Route
+router.delete('/logout', async (req,res,next) => {
+    console.log('hit the logout route');
     if(req.session){
-
-        const destroyedSession = await req.session.destroy()
-        res.status(200).json({
-          status: 200
-        })
-        
-    }
-  } catch(err) {
-    res.status(400).json({
-      status: 400,
-      error: error
-    })
-  }
-}) // END OF LOGOUT ROUTE
+        try {
+          const deletedSession = await req.session.destroy((err) => {
+              res.json({
+                status: 200,
+                data: 'You have successfully logged out.'
+              })
+          })
+        console.log(deletedSession);
+        } catch(err) {
+          next(err)
+        }
+      }
+}) // End of user logout route
 
 
 

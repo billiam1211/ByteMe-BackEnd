@@ -1,14 +1,13 @@
 const express 		= require('express');
 const router 		= express.Router();
 
-const bcrypt 		= require('bcryptjs');
 const dotenv 		= require('dotenv').config()
 const bcrypt        = require('bcryptjs');
 
 const Experience 	= require('../models/experience.js');
 const User          = require('../models/user.js');
 const Restaurant    = require('../models/restaurant.js')
-const Restaurant 	= require('../models/restaurant.js')
+
 
 
 

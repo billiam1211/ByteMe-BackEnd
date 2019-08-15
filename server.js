@@ -48,7 +48,7 @@ app.use(cors(corsOptions));
 app.use('/api/v1/users', userController);
 app.use('/api/v1/experiences', experienceController)
 app.use('/api/v1/restaurants', restaurantController)
-app.use('/auth', authController);
+app.use('/api/v1/auth', authController);
 
 
 
